@@ -84,6 +84,8 @@ class RedisPlugin(StoragePluginBase):
     def open(self, namespace: str) -> StorageBase:
         config = self._storage_config
 
-        connection = redis.StrictRedis(**config)
+        pool = redis.ConnectionPool(**config)
+
+        connection = redis.Redis(connection_pool=pool)
 
         return RedisStorage(connection, namespace)
